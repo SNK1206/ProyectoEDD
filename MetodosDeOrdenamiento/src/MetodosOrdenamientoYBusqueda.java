@@ -9,7 +9,7 @@ public class MetodosOrdenamientoYBusqueda {
     }
     private void valAleVector(){
         for(int ren=0;ren<Vector.length;ren++){
-            Vector[ren]=(int)(long)(Math.random()*20000);
+            Vector[ren]=(int)(long)(Math.random()*75);
         }
     }
     public String Mostrar(){
@@ -34,12 +34,15 @@ public class MetodosOrdenamientoYBusqueda {
         }
     }
     public String MostrarMeBur(){
+        long starTime=System.nanoTime();
         MetodoBurbuja();
+        long endTime=System.nanoTime();
+        long timeElapsed=endTime-starTime;
         String cad="";
         for(int i=0;i<Vector.length;i++){
             cad+=Vector[i]+" ";
         }
-        return cad;
+        return cad+"-"+"Tiempo="+timeElapsed+" NanoSegundos";
     }
     //Metodo Quicksort
     private void Quicksort(int primero,int ultimo){
@@ -71,12 +74,15 @@ public class MetodosOrdenamientoYBusqueda {
     }
     
     public String MostrarQuicksort(){
+        long starTime=System.nanoTime();
         Quicksort(0,Vector.length-1);
+        long endTime=System.nanoTime();
+        long timeElapsed=endTime-starTime;
         String cad="";
         for(int i=0;i<Vector.length;i++){
             cad+=Vector[i]+" ";
         }
-        return cad;
+        return cad+"-"+"Tiempo="+timeElapsed+" NanoSegundos";
     }
     //Metodo ShellShort
     private void ShellShort(){
@@ -96,15 +102,22 @@ public class MetodosOrdenamientoYBusqueda {
         }
     }
     public String MostrarShellShort(){
+        long starTime=System.nanoTime();
         ShellShort();
+        long endTime=System.nanoTime();
+        long timeElapsed=endTime-starTime;
         String cad="";
         for(int i=0;i<Vector.length;i++){
             cad+=Vector[i]+" ";
         }
-        return cad;
+        return cad+"-"+"Tiempo="+timeElapsed+" NanoSegundos";
     }
     //Metodo Radix
     private void Radix(){
+        int digito = maximoDeDigitos(Vector);
+        for(int i=0; i==digito;i++){
+           CrearYOrdenarEspacios(Vector,i); 
+        }
         /*int[][] np=new int [Vector.length][2];
         int[] q=new int[0x100];
         int i,j,k,l,f=0;
@@ -133,10 +146,6 @@ public class MetodosOrdenamientoYBusqueda {
                 for(l=q[i];l!=-1;l=np[l][1])
                     Vector[j++]=np[l][0];
         }*/
-        int digito = maximoDeDigitos(Vector);
-        for(int i=0; i==digito;i++){
-           CrearYOrdenarEspacios(Vector,i); 
-        }
     }
     private int maximoDeDigitos(int[] vector){
         int digito=1,base=10;
@@ -167,18 +176,20 @@ public class MetodosOrdenamientoYBusqueda {
                 
     }
     public String MostrarRadix(){
+        long starTime=System.nanoTime();
         Radix();
+        long endTime=System.nanoTime();
+        long timeElapsed=endTime-starTime;
         String cad="";
         for(int i=0;i<Vector.length;i++){
             cad+=Vector[i]+" ";
         }
-        return cad;
+        return cad+"-"+"Tiempo="+timeElapsed+" NanoSegundos";
     }
     //Metodo De Busqueda Secuencial
-    public boolean BusquedaSecuencial(int datoBuscar){
+    private boolean BusquedaSecuencial(int datoBuscar){
         for(int pos=0;pos<Vector.length-1;pos++){
             if(Vector[pos]==datoBuscar){
-                System.out.print(Vector[pos]+"/-");
                 return true;
             }
         }
@@ -202,11 +213,33 @@ public class MetodosOrdenamientoYBusqueda {
         }
         return false;*/
     }
+    public String MostrarBuQue(int datoBuscar){
+        long starTime=System.nanoTime();
+        BusquedaSecuencial(datoBuscar);
+        long endTime=System.nanoTime();
+        long timeElapsed=endTime-starTime;
+        return ("Tiempo="+timeElapsed+" NanoSegundos");
+    }
     //Busqueda Binaria
-    public boolean BusquedaBinaria(int datoBuscar){
+    private boolean BusquedaBinaria(int datoBuscar){
         return BusquedaBinaria(Vector,datoBuscar);
     }
     private boolean BusquedaBinaria(int[] vector,int datoBuscar){
+        long starTime=System.nanoTime();
+        Arrays.sort(Vector);
+        int tam=vector.length;
+        int mitad=tam/2;
+        if(vector[mitad]==datoBuscar){
+            return true;
+        }
+        if(tam<=1){
+            return false;
+        }
+        if(vector[mitad]>datoBuscar){
+            return BusquedaBinaria(Arrays.copyOfRange(vector,0, mitad),datoBuscar);
+        }else{
+            return BusquedaBinaria(Arrays.copyOfRange(vector,mitad++, tam),datoBuscar);
+        }//Con recursividad
         /*MetodoBurbuja();
         int centro,primero,ultimo,valorCentro;
         primero=0;
@@ -223,18 +256,13 @@ public class MetodosOrdenamientoYBusqueda {
             }
         }
         return false;*///Sin recursividad
-        Arrays.sort(Vector);
-        int tam=vector.length;
-        int mitad=tam/2;
-        if(vector[mitad]==datoBuscar){
-            System.out.print(vector[mitad]+"/-");
-            return true;
-        }
-        if(tam<=1)return false;
-        if(vector[mitad]>datoBuscar){
-            return BusquedaBinaria(Arrays.copyOfRange(vector,0, mitad),datoBuscar);
-        }else{
-            return BusquedaBinaria(Arrays.copyOfRange(vector,mitad++, tam),datoBuscar);
-        }//Con recursividad
+    }
+    
+    public String MostrarBi(int datoBuscar){
+        long starTime=System.nanoTime();
+        BusquedaBinaria(datoBuscar);
+        long endTime=System.nanoTime();
+        long timeElapsed=endTime-starTime;
+        return ("Tiempo="+timeElapsed+" NanoSegundos");
     }
 }
